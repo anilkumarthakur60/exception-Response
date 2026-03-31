@@ -1,29 +1,63 @@
 {
-  "name": "anil/exception-response",
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Anil\\ExceptionResponse\\": "src/"
-    }
-  },
-  "require": {},
-  "authors": [
-    {
-      "name": "Anil Kumar Thakur",
-      "email": "anilkumarthakur60@gmail.com"
-    }
-  ],
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Anil\\ExceptionResponse\\Providers\\ApiExceptionProvider"
-      ]
-    }
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "sort-packages": true
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+    "name": "anil/exception-response",
+    "description": "Structured JSON exception responses for Laravel APIs",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "exception", "api", "json", "error-handling"],
+    "authors": [
+        {
+            "name": "Anil Kumar Thakur",
+            "email": "anilkumarthakur60@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0||^12.0",
+        "illuminate/http": "^11.0||^12.0",
+        "illuminate/support": "^11.0||^12.0"
+    },
+    "require-dev": {
+        "laravel/framework": "^11.0||^12.0",
+        "laravel/pint": "^1.0",
+        "larastan/larastan": "^3.0",
+        "orchestra/testbench": "^9.0||^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "analyse": "vendor/bin/phpstan analyse --no-progress",
+        "format": "vendor/bin/pint",
+        "check-style": "vendor/bin/pint --test",
+        "quality": [
+            "@check-style",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Anil\\ExceptionResponse\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Anil\\ExceptionResponse\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Anil\\ExceptionResponse\\ExceptionResponseServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
