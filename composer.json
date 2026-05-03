@@ -1,29 +1,58 @@
 {
-  "name": "anil/exception-response",
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Anil\\ExceptionResponse\\": "src/"
-    }
-  },
-  "require": {},
-  "authors": [
-    {
-      "name": "Anil Kumar Thakur",
-      "email": "anilkumarthakur60@gmail.com"
-    }
-  ],
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Anil\\ExceptionResponse\\Providers\\ApiExceptionProvider"
-      ]
-    }
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "sort-packages": true
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+    "name": "anil/exception-response",
+    "description": "Drop-in JSON exception responses for Laravel 11, 12, and 13 APIs.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "laravel-11",
+        "laravel-12",
+        "laravel-13",
+        "exception",
+        "exception-handler",
+        "api",
+        "json-response"
+    ],
+    "authors": [
+        {
+            "name": "Anil Kumar Thakur",
+            "email": "anilkumarthakur60@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/http": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/support": "^11.0 || ^12.0 || ^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anil\\ExceptionResponse\\": "src/"
+        },
+        "files": [
+            "src/helpers/helper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Anil\\ExceptionResponse\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Anil\\ExceptionResponse\\Providers\\ApiExceptionProvider"
+            ]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

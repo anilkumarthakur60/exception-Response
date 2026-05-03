@@ -1,34 +1,91 @@
-# Exception Handler for api
-## About
-The purpose of this method is to handle exceptions that occur during the execution of the application.
+# Exception Response for Laravel APIs
 
-The method first checks if the request path matches the pattern 'api/*' or if the request expects a JSON response. If either of these conditions is true, it calls the apiException method and passes in the $request and $exception parameters. This method likely handles the exception and returns a JSON response.
+Drop-in JSON exception responses for Laravel **11**, **12**, and **13** — built for the slim application skeleton (no `app/Exceptions/Handler.php`).
 
-If the request does not match the pattern 'api/*' and does not expect a JSON response, the method calls the parent render method and passes in the $request and $exception parameters. This will likely render a standard error page.
+## Installation
 
-Overall, this code appears to be part of an error handling system that differentiates between API requests and other requests and provides appropriate error responses for each.
-##
-# Installation
-## Composer
-```apacheconf
+```bash
 composer require anil/exception-response
 ```
 
-Use inside  Handler.php
+The service provider is auto-discovered.
+
+## Usage (Laravel 11 / 12 / 13)
+
+Register the handlers inside `bootstrap/app.php`:
+
+```php
+use Anil\ExceptionResponse\ApiExceptionHandler;
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        //
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        ApiExceptionHandler::register($exceptions);
+    })
+    ->create();
 ```
 
-use Anil\ExceptionResponse\Traits\ApiExceptionResponse;
-class Handler extends ExceptionHandler
-{
-    use ApiExceptionResponse;
-    
-    public function render($request, Throwable $exception)
-    {
-        if ($request->is('api/*') || $request->expectsJson()) {
+That's it. Any request matching `api/*` or sending `Accept: application/json` will get a uniform JSON error payload:
 
-            return $this->apiException($request, $exception);
-        }
-
-        return parent::render($request, $exception);
-    }
+```json
+{ "message": "Resource not found." }
 ```
+
+Web routes still render the standard Laravel error pages.
+
+## Handled exceptions
+
+| Exception | Status |
+| --- | --- |
+| `ValidationException` | 422 (with `errors`) |
+| `AuthenticationException` | 401 |
+| `AuthorizationException` | 403 |
+| `ModelNotFoundException` | 404 |
+| `NotFoundHttpException` | 404 |
+| `MethodNotAllowedHttpException` | 405 |
+| `ThrottleRequestsException` | 429 |
+| `TokenMismatchException` | 419 |
+| `PostTooLargeException` | 413 |
+| `QueryException` | 500 |
+| `BadMethodCallException` | 500 |
+| `InvalidArgumentException` | 400 |
+| `BindingResolutionException` | 500 |
+| Anything implementing `HttpExceptionInterface` | exception's own status |
+
+## Configuration (optional)
+
+Publish the config:
+
+```bash
+php artisan vendor:publish --tag=exception-response-config
+```
+
+`config/exception.php`:
+
+```php
+return [
+    'api_prefixes' => ['api/*'],          // request paths that should get JSON responses
+    'include_exception_class' => false,   // add the exception FQCN to the payload
+    'include_trace_in_debug' => true,     // include file/line/trace when APP_DEBUG=true
+];
+```
+
+## Requirements
+
+- PHP **8.2+**
+- Laravel **11.x**, **12.x**, or **13.x**
+
+## License
+
+MIT
