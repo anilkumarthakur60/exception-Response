@@ -8,23 +8,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
 
-readonly class JsonResponsePayload
+readonly class Payload
 {
     public function __construct(
-        private JsonRequestDetector $detector,
+        private RequestMatcher $matcher,
         private bool $includeExceptionClass,
         private bool $includeTraceInDebug,
         private bool $debug,
         private int $traceDepth,
     ) {}
 
-    public function build(
+    public function make(
         Request $request,
         Throwable $exception,
         int $status,
         ?string $fallbackMessage = null,
     ): ?JsonResponse {
-        if (! $this->detector->wantsJson($request)) {
+        if (! $this->matcher->matches($request)) {
             return null;
         }
 

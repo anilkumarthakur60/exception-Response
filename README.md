@@ -27,7 +27,7 @@ The service provider is auto-discovered.
 Register the renderers inside `bootstrap/app.php`:
 
 ```php
-use AnilKumarThakur\ExceptionResponse\ExceptionResponse;
+use AnilKumarThakur\ExceptionResponse\JsonExceptions;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -43,7 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        ExceptionResponse::register($exceptions);
+        JsonExceptions::register($exceptions);
     })
     ->create();
 ```
@@ -96,11 +96,11 @@ return [
 
 ## Extending
 
-You can register your own renderer alongside this one. Add it inside `withExceptions()` after `ExceptionResponse::register()` — last-registered wins for matching exception types:
+You can register your own renderer alongside this one. Add it inside `withExceptions()` after `JsonExceptions::register()` — last-registered wins for matching exception types:
 
 ```php
 ->withExceptions(function (Exceptions $exceptions) {
-    ExceptionResponse::register($exceptions);
+    JsonExceptions::register($exceptions);
 
     $exceptions->render(function (\App\Exceptions\PaymentFailed $e) {
         return response()->json(['message' => $e->getMessage(), 'code' => 'PAYMENT_FAILED'], 402);
@@ -122,12 +122,12 @@ composer format:check # Pint (verify)
 
 ```
 src/
-├── ApiExceptionRenderer.php          # registers per-exception render callbacks
-├── ExceptionResponse.php             # public static API entry point
+├── JsonExceptions.php                # public static API entry point
+├── Renderer.php                      # registers per-exception render callbacks
 ├── ExceptionResponseServiceProvider.php
 └── Support/
-    ├── JsonRequestDetector.php       # decides if a request wants JSON
-    └── JsonResponsePayload.php       # builds the response body
+    ├── RequestMatcher.php            # decides if a request wants JSON
+    └── Payload.php                   # builds the response body
 config/
 └── exception-response.php
 tests/

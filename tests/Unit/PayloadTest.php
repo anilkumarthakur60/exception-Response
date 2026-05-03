@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace AnilKumarThakur\ExceptionResponse\Tests\Unit;
 
-use AnilKumarThakur\ExceptionResponse\Support\JsonRequestDetector;
-use AnilKumarThakur\ExceptionResponse\Support\JsonResponsePayload;
+use AnilKumarThakur\ExceptionResponse\Support\Payload;
+use AnilKumarThakur\ExceptionResponse\Support\RequestMatcher;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-final class JsonResponsePayloadTest extends TestCase
+final class PayloadTest extends TestCase
 {
     #[Test]
     public function it_returns_null_for_non_json_requests(): void
     {
         $payload = $this->makePayload();
 
-        $response = $payload->build(
+        $response = $payload->make(
             Request::create('/web', 'GET'),
             new RuntimeException('boom'),
             500,
@@ -32,7 +32,7 @@ final class JsonResponsePayloadTest extends TestCase
     {
         $payload = $this->makePayload(debug: false);
 
-        $response = $payload->build(
+        $response = $payload->make(
             Request::create('/api/users', 'GET'),
             new RuntimeException('boom'),
             500,
@@ -51,7 +51,7 @@ final class JsonResponsePayloadTest extends TestCase
     {
         $payload = $this->makePayload();
 
-        $response = $payload->build(
+        $response = $payload->make(
             Request::create('/api/users', 'GET'),
             new RuntimeException(''),
             404,
@@ -69,7 +69,7 @@ final class JsonResponsePayloadTest extends TestCase
     {
         $payload = $this->makePayload(includeExceptionClass: true);
 
-        $response = $payload->build(
+        $response = $payload->make(
             Request::create('/api/users', 'GET'),
             new RuntimeException('boom'),
             500,
@@ -86,7 +86,7 @@ final class JsonResponsePayloadTest extends TestCase
     {
         $payload = $this->makePayload(debug: true, includeTraceInDebug: true);
 
-        $response = $payload->build(
+        $response = $payload->make(
             Request::create('/api/users', 'GET'),
             new RuntimeException('boom'),
             500,
@@ -105,9 +105,9 @@ final class JsonResponsePayloadTest extends TestCase
         bool $includeTraceInDebug = false,
         bool $debug = false,
         int $traceDepth = 5,
-    ): JsonResponsePayload {
-        return new JsonResponsePayload(
-            detector: new JsonRequestDetector(['api/*']),
+    ): Payload {
+        return new Payload(
+            matcher: new RequestMatcher(['api/*']),
             includeExceptionClass: $includeExceptionClass,
             includeTraceInDebug: $includeTraceInDebug,
             debug: $debug,

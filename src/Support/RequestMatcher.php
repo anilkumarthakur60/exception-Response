@@ -6,7 +6,7 @@ namespace AnilKumarThakur\ExceptionResponse\Support;
 
 use Illuminate\Http\Request;
 
-readonly class JsonRequestDetector
+readonly class RequestMatcher
 {
     /**
      * @param  list<string>  $apiPrefixes
@@ -15,7 +15,7 @@ readonly class JsonRequestDetector
         private array $apiPrefixes,
     ) {}
 
-    public function wantsJson(Request $request): bool
+    public function matches(Request $request): bool
     {
         foreach ($this->apiPrefixes as $prefix) {
             if ($request->is($prefix)) {

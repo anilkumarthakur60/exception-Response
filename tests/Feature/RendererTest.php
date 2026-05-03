@@ -10,7 +10,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
 
-final class ApiExceptionRendererTest extends TestCase
+final class RendererTest extends TestCase
 {
     protected function defineRoutes($router): void
     {

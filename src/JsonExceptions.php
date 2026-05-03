@@ -7,12 +7,12 @@ namespace AnilKumarThakur\ExceptionResponse;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Configuration\Exceptions;
 
-final class ExceptionResponse
+final class JsonExceptions
 {
     public static function register(Exceptions $exceptions): void
     {
         Container::getInstance()
-            ->make(ApiExceptionRenderer::class)
+            ->make(Renderer::class)
             ->register($exceptions);
     }
 }

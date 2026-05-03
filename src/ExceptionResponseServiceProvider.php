@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AnilKumarThakur\ExceptionResponse;
 
-use AnilKumarThakur\ExceptionResponse\Support\JsonRequestDetector;
-use AnilKumarThakur\ExceptionResponse\Support\JsonResponsePayload;
+use AnilKumarThakur\ExceptionResponse\Support\Payload;
+use AnilKumarThakur\ExceptionResponse\Support\RequestMatcher;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +16,7 @@ final class ExceptionResponseServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/exception-response.php', 'exception-response');
 
-        $this->app->singleton(JsonRequestDetector::class, static function (Application $app): JsonRequestDetector {
+        $this->app->singleton(RequestMatcher::class, static function (Application $app): RequestMatcher {
             $config = $app->make('config');
             assert($config instanceof Repository);
 
@@ -29,17 +29,17 @@ final class ExceptionResponseServiceProvider extends ServiceProvider
                 static fn (string $value): bool => $value !== '',
             ));
 
-            return new JsonRequestDetector($normalised);
+            return new RequestMatcher($normalised);
         });
 
-        $this->app->singleton(JsonResponsePayload::class, static function (Application $app): JsonResponsePayload {
+        $this->app->singleton(Payload::class, static function (Application $app): Payload {
             $config = $app->make('config');
             assert($config instanceof Repository);
 
             $traceDepth = $config->get('exception-response.trace_depth', 10);
 
-            return new JsonResponsePayload(
-                detector: $app->make(JsonRequestDetector::class),
+            return new Payload(
+                matcher: $app->make(RequestMatcher::class),
                 includeExceptionClass: (bool) $config->get('exception-response.include_exception_class', false),
                 includeTraceInDebug: (bool) $config->get('exception-response.include_trace_in_debug', true),
                 debug: (bool) $config->get('app.debug', false),
@@ -47,10 +47,10 @@ final class ExceptionResponseServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(ApiExceptionRenderer::class, static function (Application $app): ApiExceptionRenderer {
-            return new ApiExceptionRenderer(
-                detector: $app->make(JsonRequestDetector::class),
-                payload: $app->make(JsonResponsePayload::class),
+        $this->app->singleton(Renderer::class, static function (Application $app): Renderer {
+            return new Renderer(
+                matcher: $app->make(RequestMatcher::class),
+                payload: $app->make(Payload::class),
             );
         });
     }

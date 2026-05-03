@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AnilKumarThakur\ExceptionResponse\Tests;
 
-use AnilKumarThakur\ExceptionResponse\ExceptionResponse;
 use AnilKumarThakur\ExceptionResponse\ExceptionResponseServiceProvider;
+use AnilKumarThakur\ExceptionResponse\JsonExceptions;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -23,6 +23,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function defineExceptions(Exceptions $exceptions): void
     {
-        ExceptionResponse::register($exceptions);
+        JsonExceptions::register($exceptions);
     }
 }
