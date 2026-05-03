@@ -21,6 +21,17 @@
         }
     ],
     "homepage": "https://github.com/anilkumarthakur60/laravel-exception-response",
+    "support": {
+        "issues": "https://github.com/anilkumarthakur60/laravel-exception-response/issues",
+        "source": "https://github.com/anilkumarthakur60/laravel-exception-response",
+        "docs": "https://github.com/anilkumarthakur60/laravel-exception-response#readme"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/anilkumarthakur60"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "illuminate/config": "^11.0 || ^12.0 || ^13.0",
@@ -53,7 +64,12 @@
         "test:coverage": "vendor/bin/phpunit --coverage-text",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=512M",
         "format": "vendor/bin/pint",
-        "format:check": "vendor/bin/pint --test"
+        "format:check": "vendor/bin/pint --test",
+        "qa": [
+            "@format:check",
+            "@analyse",
+            "@test"
+        ]
     },
     "extra": {
         "branch-alias": {

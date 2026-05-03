@@ -51,4 +51,40 @@ final class RequestMatcherTest extends TestCase
         self::assertTrue($matcher->matches(Request::create('/api/v1/users', 'GET')));
         self::assertFalse($matcher->matches(Request::create('/admin', 'GET')));
     }
+
+    #[Test]
+    public function it_matches_xhr_requests_via_expects_json(): void
+    {
+        $matcher = new RequestMatcher(['api/*']);
+
+        $request = Request::create('/dashboard', 'GET');
+        $request->headers->set('X-Requested-With', 'XMLHttpRequest');
+        $request->headers->set('Accept', 'application/json');
+
+        self::assertTrue($matcher->matches($request));
+    }
+
+    #[Test]
+    public function it_matches_head_requests_to_api_prefixes(): void
+    {
+        $matcher = new RequestMatcher(['api/*']);
+
+        $request = Request::create('/api/users', 'HEAD');
+
+        self::assertTrue($matcher->matches($request));
+    }
+
+    #[Test]
+    public function empty_prefix_list_only_matches_explicit_json_requests(): void
+    {
+        $matcher = new RequestMatcher([]);
+
+        $jsonRequest = Request::create('/anything', 'GET');
+        $jsonRequest->headers->set('Accept', 'application/json');
+
+        $webRequest = Request::create('/anything', 'GET');
+
+        self::assertTrue($matcher->matches($jsonRequest));
+        self::assertFalse($matcher->matches($webRequest));
+    }
 }

@@ -48,4 +48,16 @@ return [
     */
     'trace_depth' => 10,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Include Machine-Readable Error Code
+    |--------------------------------------------------------------------------
+    |
+    | When true, the response includes a stable "error_code" field (e.g.
+    | "validation_failed", "unauthenticated") that clients can switch on
+    | without parsing localized messages.
+    |
+    */
+    'include_error_code' => true,
+
 ];
