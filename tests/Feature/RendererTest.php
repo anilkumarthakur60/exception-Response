@@ -21,7 +21,6 @@ use InvalidArgumentException;
 use PDOException;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 final class RendererTest extends TestCase
 {
