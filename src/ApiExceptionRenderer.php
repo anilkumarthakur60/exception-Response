@@ -30,7 +30,8 @@ final class ApiExceptionRenderer
     public function __construct(
         private readonly JsonRequestDetector $detector,
         private readonly JsonResponsePayload $payload,
-    ) {}
+    ) {
+    }
 
     public function register(Exceptions $exceptions): void
     {
@@ -56,13 +57,13 @@ final class ApiExceptionRenderer
 
     private function renderValidation(ValidationException $e, Request $request): ?JsonResponse
     {
-        if (! $this->detector->wantsJson($request)) {
+        if (!$this->detector->wantsJson($request)) {
             return null;
         }
 
         return new JsonResponse([
             'message' => $e->getMessage(),
-            'errors' => $e->errors(),
+            'errors'  => $e->errors(),
         ], $e->status);
     }
 
@@ -77,7 +78,7 @@ final class ApiExceptionRenderer
     }
 
     /**
-     * @param  ModelNotFoundException<Model>  $e
+     * @param ModelNotFoundException<Model> $e
      */
     private function renderModelNotFound(ModelNotFoundException $e, Request $request): ?JsonResponse
     {

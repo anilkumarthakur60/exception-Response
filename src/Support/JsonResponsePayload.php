@@ -16,7 +16,8 @@ readonly class JsonResponsePayload
         private bool $includeTraceInDebug,
         private bool $debug,
         private int $traceDepth,
-    ) {}
+    ) {
+    }
 
     public function build(
         Request $request,
@@ -24,7 +25,7 @@ readonly class JsonResponsePayload
         int $status,
         ?string $fallbackMessage = null,
     ): ?JsonResponse {
-        if (! $this->detector->wantsJson($request)) {
+        if (!$this->detector->wantsJson($request)) {
             return null;
         }
 

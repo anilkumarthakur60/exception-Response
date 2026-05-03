@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 readonly class JsonRequestDetector
 {
     /**
-     * @param  list<string>  $apiPrefixes
+     * @param list<string> $apiPrefixes
      */
     public function __construct(
         private array $apiPrefixes,
-    ) {}
+    ) {
+    }
 
     public function wantsJson(Request $request): bool
     {
