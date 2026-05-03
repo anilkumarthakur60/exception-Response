@@ -1,21 +1,33 @@
-# Exception Response for Laravel APIs
+# Laravel Exception Response
 
-Drop-in JSON exception responses for Laravel **11**, **12**, and **13** — built for the slim application skeleton (no `app/Exceptions/Handler.php`).
+[![tests](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/tests.yml/badge.svg)](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/tests.yml)
+[![static analysis](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/static-analysis.yml)
+[![code style](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/code-style.yml/badge.svg)](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/code-style.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
+Drop-in JSON exception responses for **Laravel 11, 12, and 13** APIs — built for the slim application skeleton (no `app/Exceptions/Handler.php`).
+
+---
+
+## Requirements
+
+- PHP **8.2+**
+- Laravel **11.x**, **12.x**, or **13.x**
 
 ## Installation
 
 ```bash
-composer require anil/exception-response
+composer require anilkumarthakur/laravel-exception-response
 ```
 
 The service provider is auto-discovered.
 
-## Usage (Laravel 11 / 12 / 13)
+## Usage
 
-Register the handlers inside `bootstrap/app.php`:
+Register the renderers inside `bootstrap/app.php`:
 
 ```php
-use Anil\ExceptionResponse\ApiExceptionHandler;
+use AnilKumarThakur\ExceptionResponse\ExceptionResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -31,7 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        ApiExceptionHandler::register($exceptions);
+        ExceptionResponse::register($exceptions);
     })
     ->create();
 ```
@@ -63,7 +75,7 @@ Web routes still render the standard Laravel error pages.
 | `BindingResolutionException` | 500 |
 | Anything implementing `HttpExceptionInterface` | exception's own status |
 
-## Configuration (optional)
+## Configuration
 
 Publish the config:
 
@@ -71,21 +83,63 @@ Publish the config:
 php artisan vendor:publish --tag=exception-response-config
 ```
 
-`config/exception.php`:
+`config/exception-response.php`:
 
 ```php
 return [
-    'api_prefixes' => ['api/*'],          // request paths that should get JSON responses
-    'include_exception_class' => false,   // add the exception FQCN to the payload
-    'include_trace_in_debug' => true,     // include file/line/trace when APP_DEBUG=true
+    'api_prefixes'             => ['api/*'],
+    'include_exception_class'  => false,
+    'include_trace_in_debug'   => true,
+    'trace_depth'              => 10,
 ];
 ```
 
-## Requirements
+## Extending
 
-- PHP **8.2+**
-- Laravel **11.x**, **12.x**, or **13.x**
+You can register your own renderer alongside this one. Add it inside `withExceptions()` after `ExceptionResponse::register()` — last-registered wins for matching exception types:
+
+```php
+->withExceptions(function (Exceptions $exceptions) {
+    ExceptionResponse::register($exceptions);
+
+    $exceptions->render(function (\App\Exceptions\PaymentFailed $e) {
+        return response()->json(['message' => $e->getMessage(), 'code' => 'PAYMENT_FAILED'], 402);
+    });
+})
+```
+
+## Development
+
+```bash
+composer install
+composer test         # PHPUnit
+composer analyse      # PHPStan level 10
+composer format       # Pint (apply)
+composer format:check # Pint (verify)
+```
+
+## Architecture
+
+```
+src/
+├── ApiExceptionRenderer.php          # registers per-exception render callbacks
+├── ExceptionResponse.php             # public static API entry point
+├── ExceptionResponseServiceProvider.php
+└── Support/
+    ├── JsonRequestDetector.php       # decides if a request wants JSON
+    └── JsonResponsePayload.php       # builds the response body
+config/
+└── exception-response.php
+tests/
+├── TestCase.php
+├── Feature/
+└── Unit/
+```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-MIT
+MIT — see [LICENSE.md](LICENSE.md).

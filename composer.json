@@ -1,5 +1,5 @@
 {
-    "name": "anil/exception-response",
+    "name": "anilkumarthakur/laravel-exception-response",
     "description": "Drop-in JSON exception responses for Laravel 11, 12, and 13 APIs.",
     "license": "MIT",
     "type": "library",
@@ -16,42 +16,62 @@
     "authors": [
         {
             "name": "Anil Kumar Thakur",
-            "email": "anilkumarthakur60@gmail.com"
+            "email": "anilkumarthakur60@gmail.com",
+            "role": "Developer"
         }
     ],
+    "homepage": "https://github.com/anilkumarthakur60/laravel-exception-response",
     "require": {
         "php": "^8.2",
+        "illuminate/config": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/container": "^11.0 || ^12.0 || ^13.0",
         "illuminate/contracts": "^11.0 || ^12.0 || ^13.0",
         "illuminate/http": "^11.0 || ^12.0 || ^13.0",
         "illuminate/support": "^11.0 || ^12.0 || ^13.0"
     },
     "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
         "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
     },
     "autoload": {
         "psr-4": {
-            "Anil\\ExceptionResponse\\": "src/"
-        },
-        "files": [
-            "src/helpers/helper.php"
-        ]
+            "AnilKumarThakur\\ExceptionResponse\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Anil\\ExceptionResponse\\Tests\\": "tests/"
+            "AnilKumarThakur\\ExceptionResponse\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always",
+        "test:coverage": "vendor/bin/phpunit --coverage-text",
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=512M",
+        "format": "vendor/bin/pint",
+        "format:check": "vendor/bin/pint --test"
+    },
     "extra": {
+        "branch-alias": {
+            "dev-main": "2.x-dev"
+        },
         "laravel": {
             "providers": [
-                "Anil\\ExceptionResponse\\Providers\\ApiExceptionProvider"
+                "AnilKumarThakur\\ExceptionResponse\\ExceptionResponseServiceProvider"
             ]
         }
     },
     "config": {
         "optimize-autoloader": true,
-        "sort-packages": true
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": false
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true

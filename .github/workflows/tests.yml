@@ -1,8 +1,8 @@
-name: CI
+name: tests
 
 on:
   push:
-    branches: [main, upgrade]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -52,22 +52,14 @@ jobs:
             composer-${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-
             composer-${{ runner.os }}-php${{ matrix.php }}-
 
-      - name: Install dependencies
+      - name: Pin Laravel & Testbench
         run: |
           composer require --dev --no-interaction --no-update \
             "orchestra/testbench:${{ matrix.testbench }}"
           composer update --prefer-dist --prefer-stable --no-interaction --no-progress
 
-      - name: Show installed Laravel version
-        run: composer show illuminate/support | grep -E '^versions' || true
-
       - name: Lint PHP source
-        run: find src -name "*.php" -print0 | xargs -0 -n1 -P4 php -l
+        run: find src tests -name "*.php" -print0 | xargs -0 -n1 -P4 php -l
 
       - name: Run tests
-        run: |
-          if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then
-            vendor/bin/phpunit --colors=always
-          else
-            echo "No phpunit config present — skipping test run."
-          fi
+        run: vendor/bin/phpunit --colors=always

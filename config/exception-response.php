@@ -9,7 +9,7 @@ return [
     | API Path Prefixes
     |--------------------------------------------------------------------------
     |
-    | Requests matching any of these patterns (or that send Accept: application/json)
+    | Requests matching any of these patterns (or sending Accept: application/json)
     | will receive JSON exception responses. Anything else falls through to
     | Laravel's default rendering.
     |
@@ -18,10 +18,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Include Exception Class Name
+    | Include Exception Class
     |--------------------------------------------------------------------------
     |
-    | When true, the response payload will include the FQCN of the thrown
+    | When true, the response payload includes the FQCN of the thrown
     | exception under the "exception" key. Useful for debugging clients.
     |
     */
@@ -37,5 +37,15 @@ return [
     |
     */
     'include_trace_in_debug' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Trace Depth
+    |--------------------------------------------------------------------------
+    |
+    | Number of stack frames to include when "include_trace_in_debug" is on.
+    |
+    */
+    'trace_depth' => 10,
 
 ];
