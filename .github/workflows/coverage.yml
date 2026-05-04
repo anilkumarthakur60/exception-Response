@@ -1,0 +1,49 @@
+name: coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    name: Code coverage
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, json, sqlite, pdo_sqlite
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-coverage-${{ runner.os }}-${{ hashFiles('composer.json') }}
+          restore-keys: composer-coverage-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --prefer-stable --no-interaction --no-progress
+
+      - name: Run tests with coverage
+        run: vendor/bin/phpunit --coverage-clover=build/coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: build/coverage.xml
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
