@@ -48,7 +48,7 @@ jobs:
         run: composer validate --strict --no-check-lock
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.composer/cache/files
           key: composer-${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-${{ matrix.dependency-version }}-${{ hashFiles('composer.json') }}
