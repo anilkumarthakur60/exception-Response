@@ -26,7 +26,7 @@ The public entry point was renamed.
 
 #### 2. Class renames (only if you reference these classes directly)
 
-Most users don't need to touch these — they're internal. If you've extended or directly resolved them from the container, update the references:
+Most users don't need to touch these  they're internal. If you've extended or directly resolved them from the container, update the references:
 
 | 1.x | 2.0 |
 | --- | --- |
@@ -52,6 +52,6 @@ Most users don't need to touch these — they're internal. If you've extended or
 
 - **Machine-readable error code.** When `include_error_code` is enabled (default), responses include a stable `error_code` key (e.g. `validation_failed`, `unauthenticated`).
 
-- **`ExceptionRendered` event.** Dispatched after every JSON response is built — wire up logging, Sentry tagging, or correlation-ID injection from a single listener.
+- **`ExceptionRendered` event.** Dispatched after every JSON response is built  wire up logging, Sentry tagging, or correlation-ID injection from a single listener.
 
 - **Full request matcher.** `RequestMatcher` now also matches `X-Requested-With: XMLHttpRequest` via Laravel's `expectsJson()` fallback.

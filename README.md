@@ -6,7 +6,7 @@
 [![coverage](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/coverage.yml/badge.svg)](https://github.com/anilkumarthakur60/laravel-exception-response/actions/workflows/coverage.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
-Drop-in JSON exception responses for **Laravel 11, 12, and 13** APIs — built for the slim application skeleton (no `app/Exceptions/Handler.php`).
+Drop-in JSON exception responses for **Laravel 11, 12, and 13** APIs  built for the slim application skeleton (no `app/Exceptions/Handler.php`).
 
 - ✅ Uniform JSON shape for every exception
 - ✅ Translatable messages (English + Spanish included; bring your own locales)
@@ -157,7 +157,7 @@ Useful for Sentry / Bugsnag tagging, request-id correlation, or per-tenant alert
 
 ## Extending
 
-Register your own renderer alongside this one. Add it inside `withExceptions()` after `JsonExceptions::register()` — first-registered wins for matching exception types, so put the more specific callback first:
+Register your own renderer alongside this one. Add it inside `withExceptions()` after `JsonExceptions::register()`  first-registered wins for matching exception types, so put the more specific callback first:
 
 ```php
 ->withExceptions(function (Exceptions $exceptions) {
@@ -210,7 +210,7 @@ tests/
 
 - Follows [Semantic Versioning](https://semver.org/). Breaking changes ship as a major version with notes in [UPGRADE.md](UPGRADE.md).
 - Security issues: see [SECURITY.md](SECURITY.md). Please **do not** file public issues for vulnerabilities.
-- Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+- Contributions welcome  see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Changelog
 
@@ -218,4 +218,4 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-MIT — see [LICENSE.md](LICENSE.md).
+MIT  see [LICENSE.md](LICENSE.md).

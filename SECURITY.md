@@ -5,7 +5,7 @@
 | Version | Supported |
 | ------- | --------- |
 | 2.x     | ✅ active  |
-| 1.x     | ❌ end-of-life — please upgrade (see [UPGRADE.md](UPGRADE.md)) |
+| 1.x     | ❌ end-of-life  please upgrade (see [UPGRADE.md](UPGRADE.md)) |
 
 ## Reporting a Vulnerability
 
